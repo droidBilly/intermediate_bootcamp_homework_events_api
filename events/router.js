@@ -39,16 +39,29 @@ router.get('/events/:id', (request, response) => {
 
 router.post('/events', (request, response) => {
   const event = request.body
-  Events.create(event)
-  .then(entity => {
-    response.status(201).send(entity)
-  })
-  .catch(error => {
-    response.status(500).send({
-      message: `Something went wrong`,
-      error
+  console.log(event.start_date)
+  if (event.start_date >= today && event.end_date >= event.start_date) {
+    Events.create(event)
+    .then(entity => {
+      response.status(201).send(entity)
     })
-  })
+    .catch(error => {
+      response.status(500).send({
+        message: `Something went wrong`,
+        error
+      })
+    })
+  }
+  else if (event.start_date < today) {
+    response.send({
+      message: 'The event needs to be in the future'
+    })
+  }
+  else {
+    response.send({
+      message: 'The end date can\'t be before the start date'
+    })
+  }
 })
 
 router.delete('/events/:id', (request, response) => {
