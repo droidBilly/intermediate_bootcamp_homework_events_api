@@ -86,7 +86,6 @@ router.delete('/events/:id', (request, response) => {
 router.put('/events/:id', (request, response) => {
   const eventId = Number(request.params.id)
   const updates = request.body
-  console.log(updates)
   Events.findById(request.params.id)
   .then(entity => {
     return entity.update(updates)
